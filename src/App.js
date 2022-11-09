@@ -21,6 +21,11 @@ const CardsContainer = styled.div`
 function App() {
   const [pesquisa, setPesquisa] = useState("");
   const [idFilter, setIdFilter] = useState("");
+  const [type, setType] = useState("");
+  const [order, setOrder] = useState("pokemon");
+
+  console.log(type);
+  console.log(order);
 
   return (
     <>
@@ -30,13 +35,38 @@ function App() {
         setIdFilter={setIdFilter}
         pesquisa={pesquisa}
         setPesquisa={setPesquisa}
+        type={type}
+        setType={setType}
+        order={order}
+        setOrder={setOrder}
       />
       <CardsContainer>
-        {pokemons.filter((pokemon) => {
-          return idFilter ? pokemon.id.includes(idFilter) : pokemon
-        })
+        {pokemons
           .filter((pokemon) => {
-            return pokemon.name.english.toLowerCase().includes(pesquisa.toLowerCase());
+            return idFilter ? pokemon.id.includes(idFilter) : pokemon;
+          })
+          .filter((pokemon) => {
+            return pokemon.name.english
+              .toLowerCase()
+              .includes(pesquisa.toLowerCase());
+          })
+          .filter((pokemon) => {
+            return pokemon.type.includes(type) || type === "";
+          })
+          .sort((a,b) => {
+            if (order === "cresc") {
+              if(a.name.english < b.name.english){
+                return -1
+              } else {
+                return 1
+              }
+            } else if (order === "decresc"){
+              if(a.name.english < b.name.english){
+                return 1
+              } else {
+                return -1
+              }
+            }
           })
           .map((pokemon) => {
             return (
